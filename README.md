@@ -1,79 +1,65 @@
 # CraftEconomy
 
-Minecraft-themed survival ledger and inventory tracker for Code.org App Lab.
+Minecraft-themed survival ledger and inventory tracker.
 
-## Core Concepts
+## Live Version
 
-- Money is tracked in Emeralds.
-- Local wallet cash is the In-Hand Inventory.
-- Secure bank storage is the Ender Chest.
-- Warning state becomes a Phantom Attack Danger alert.
+This repo is set up for **GitHub Pages** using the plain web app files:
 
-## Suggested App Lab IDs
+- `index.html`
+- `style.css`
+- `script.js`
 
-- `screen1`
-- `titleLabel`
-- `themeDropdown`
-- `addExpenseBtn`
-- `typeDropdown`
-- `accountDropdown`
-- `categoryDropdown`
-- `descriptionInput`
-- `expenseInput`
-- `resetBtn`
-- `ledgerDisplay`
-- `totalDisplay`
-- `walletSpentDisplay`
-- `bankSpentDisplay`
-- `walletRemainingDisplay`
-- `bankRemainingDisplay`
-- `totalSpentDisplay`
-- `totalRemainingDisplay`
-- `statusMessage`
+## Archive Files
 
-## Theme Options
+These files are kept as reference material from the App Lab version:
 
-Add these exact options to `themeDropdown`:
+- `app_lab_code.js`
+- `BLUEPRINT.md`
+- `GITHUB_UPLOAD_GUIDE.md`
 
-- `Overworld`
-- `Cave Night`
-- `Phantom Attack`
+## What the app does
 
-## Dropdown Options
+- tracks Emeralds as the currency
+- tracks transactions with a ledger
+- separates money between `In-Hand Wallet 💰` and `Ender Bank 🏦`
+- uses categories like:
+  - `Food 🥩`
+  - `Village Taxes 📜`
+  - `Redstone Data 📱`
+  - `Anvil Repair 🔨`
+- shows a safe green status or a red Phantom Attack Danger warning
 
-Add these exact options to `typeDropdown`:
+## How to run locally
 
-- `Expense`
-- `Income`
-- `Transfer`
+Open `index.html` in a browser or use a local server if you want a more reliable preview.
 
-Add these exact options to `accountDropdown`:
+## How to host on GitHub Pages
 
-- `In-Hand Wallet 💰`
-- `Ender Bank 🏦`
+1. Push this repo to GitHub.
+2. Go to the repository settings.
+3. Open the **Pages** section.
+4. Set the source to the branch that contains `index.html` and the root folder.
+5. Save the settings.
+6. Wait for GitHub to publish the site.
 
-Add these exact options to `categoryDropdown`:
+## Recommended upload set
 
-- `Food`
-- `Bills`
-- `Data Plans`
-- `Laptop/Tech Repair`
+If you only want the live website files, upload:
 
-## Contribution Notes
+- `index.html`
+- `style.css`
+- `script.js`
 
-If you add a new theme:
+If you want the full project archive too, also include:
 
-1. Add the theme label to `themeDropdown` in Design Mode.
-2. Add a matching `else if` block inside `applyTheme(themeName)`.
-3. Reuse hex colors that fit the Minecraft palette.
-4. Keep the IDs unchanged so the App Lab code continues to work.
+- `README.md`
+- `BLUEPRINT.md`
+- `GITHUB_UPLOAD_GUIDE.md`
+- `app_lab_code.js`
 
-## AP CSP Notes
+## Notes
 
-The code uses:
-
-- parallel arrays for data abstraction
-- a student-developed procedure with a parameter
-- iteration through the arrays
-- selection with `if/else`
-- visual output through `setText` and `setProperty`
+- Keep the dropdown option text exact.
+- Keep the IDs unchanged if you edit the code.
+- The App Lab file is preserved for reference, but GitHub Pages will use `index.html`.
