@@ -7,23 +7,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
-  <nav class="pixel-box">
-    <div class="nav-logo">CRAFTECONOMY</div>
+  <nav class="pixel-box site-nav">
+    <div class="nav-logo">⛏ Crafteconomy</div>
     <ul class="nav-links">
-      <li><a href="#overview">Overview</a></li>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#world">World</a></li>
       <li><a href="#ledger">Ledger</a></li>
       <li><a href="#status">Status</a></li>
     </ul>
   </nav>
 
-  <header class="hero">
+  <header id="hero" class="hero">
     <div class="sky-layer"></div>
     <div class="sun"></div>
     <div class="cloud cloud-1"></div>
     <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
 
     <div class="tree tree-1">
       <div class="tree-leaves"></div>
@@ -33,6 +35,11 @@
       <div class="tree-leaves"></div>
       <div class="tree-trunk"></div>
     </div>
+    <div class="tree tree-3">
+      <div class="tree-leaves"></div>
+      <div class="tree-trunk"></div>
+    </div>
+
     <div class="creeper">
       <div class="creeper-head"></div>
       <div class="creeper-body"></div>
@@ -50,18 +57,18 @@
         <div class="hero-kicker">Minecraft Survival Ledger</div>
         <div class="hero-name">CraftEconomy</div>
         <div class="hero-sub">
-          Track emeralds across your wallet, Ender Chest, and ledger in a blocky survival interface.
+          Emerald tracking, village bills, and phantom danger alerts inside a pixel world.
         </div>
         <div class="hero-badges">
           <span class="chip chip-green">Server Online</span>
-          <span class="chip">Phantom Watch Active</span>
+          <span class="chip">Wallet + Ender Chest</span>
           <span class="chip">AP CSP Ready</span>
         </div>
       </div>
 
-      <div class="cta-buttons">
+      <div class="hero-cta">
         <a href="#ledger" class="mc-btn btn-green">Open Ledger</a>
-        <a href="#overview" class="mc-btn btn-blue">View Stats</a>
+        <a href="#world" class="mc-btn btn-blue">View World</a>
       </div>
     </div>
   </header>
@@ -69,32 +76,28 @@
   <div class="pixel-divider"></div>
 
   <main>
-    <section id="overview" class="section-wrap">
+    <section id="world" class="section-wrap">
       <div class="section-header">
         <div class="section-icon icon-emerald"></div>
-        <div class="section-title">Overview / Inventory</div>
+        <div class="section-title">World / Overview</div>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-card pixel-box">
-          <div class="stat-icon">💎</div>
-          <div class="stat-value">EMERALDS</div>
-          <div class="stat-label">Currency</div>
+      <div class="world-grid">
+        <div class="world-card grass pixel-box">
+          <span>Currency</span>
+          <strong>Emeralds</strong>
         </div>
-        <div class="stat-card pixel-box">
-          <div class="stat-icon">🏦</div>
-          <div class="stat-value">ENDER CHEST</div>
-          <div class="stat-label">Bank Vault</div>
+        <div class="world-card stone pixel-box">
+          <span>Safe Zone</span>
+          <strong>Overworld</strong>
         </div>
-        <div class="stat-card pixel-box">
-          <div class="stat-icon">💰</div>
-          <div class="stat-value">IN-HAND</div>
-          <div class="stat-label">Wallet Balance</div>
+        <div class="world-card dirt pixel-box">
+          <span>Danger State</span>
+          <strong>Phantom Attack</strong>
         </div>
-        <div class="stat-card pixel-box">
-          <div class="stat-icon">👻</div>
-          <div class="stat-value">PHANTOMS</div>
-          <div class="stat-label">Threat Level</div>
+        <div class="world-card wood pixel-box">
+          <span>Reserve Goal</span>
+          <strong id="reserveEcho">150.00 Emeralds</strong>
         </div>
       </div>
     </section>
@@ -104,14 +107,14 @@
     <section id="ledger" class="section-wrap">
       <div class="section-header">
         <div class="section-icon icon-gold"></div>
-        <div class="section-title">Ledger Console / Control Panel</div>
+        <div class="section-title">Ledger / Control Panel</div>
       </div>
 
-      <div class="ledger-panel pixel-box">
+      <div class="ledger-shell pixel-box">
         <div class="ledger-grid">
           <div class="ledger-left">
             <div class="ledger-title">Manage transactions like a survival server panel</div>
-            <div class="ledger-sub">Use the selectors below to log expenses, income, or transfers.</div>
+            <div class="ledger-sub">Log expenses, income, and transfers using the controls below.</div>
 
             <label>
               Transaction Type
@@ -191,9 +194,6 @@
                   <strong id="totalRemainingDisplay">320.00 Emeralds</strong>
                 </div>
               </div>
-              <div class="reserve-readout">
-                Reserve Goal: <span id="reserveEcho">150.00 Emeralds</span>
-              </div>
             </div>
 
             <div class="ledger-box pixel-box">
@@ -220,14 +220,24 @@
         </div>
       </div>
     </section>
+
+    <div class="pixel-divider"></div>
+
+    <section id="status" class="section-wrap">
+      <div class="section-header">
+        <div class="section-icon icon-diamond"></div>
+        <div class="section-title">Status / Watch</div>
+      </div>
+      <div class="status-panel pixel-box">
+        Use the ledger above to trigger safe and danger states. The status bar turns green when your emerald reserve is healthy and red when phantom danger appears.
+      </div>
+    </section>
   </main>
 
-  <div class="pixel-divider"></div>
-
   <footer class="footer-box pixel-box">
-    CraftEconomy | Built block by block for the AP CSP Create Task
+    CraftEconomy | Built block by block for AP CSP
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

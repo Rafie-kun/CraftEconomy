@@ -47,46 +47,49 @@ function applyTheme(themeName) {
 
   if (themeName === "Overworld") {
     root.setProperty("--bg", "#1a1f1a");
-    root.setProperty("--panel", "#1b1b1b");
-    root.setProperty("--panel-alt", "#141814");
-    root.setProperty("--border", "#485c46");
-    root.setProperty("--text", "#f0f5eb");
-    root.setProperty("--muted", "#a9b5a2");
     root.setProperty("--green", "#5aac44");
     root.setProperty("--dark-green", "#3d7a2e");
     root.setProperty("--dirt", "#8b6340");
     root.setProperty("--dark-dirt", "#6b4c30");
+    root.setProperty("--stone", "#7f7f7f");
+    root.setProperty("--stone-light", "#aaaaaa");
+    root.setProperty("--wood", "#a0762a");
     root.setProperty("--gold", "#ffd700");
     root.setProperty("--diamond", "#4de6e6");
     root.setProperty("--redstone", "#e03030");
+    root.setProperty("--panel", "#1e1e1e");
+    root.setProperty("--text", "#f0f0f0");
+    root.setProperty("--muted", "#c9c9c9");
   } else if (themeName === "Cave Night") {
     root.setProperty("--bg", "#101410");
-    root.setProperty("--panel", "#121412");
-    root.setProperty("--panel-alt", "#0f110f");
-    root.setProperty("--border", "#3b4a39");
-    root.setProperty("--text", "#eef6e8");
-    root.setProperty("--muted", "#9db09a");
     root.setProperty("--green", "#6dc15d");
     root.setProperty("--dark-green", "#355c2b");
     root.setProperty("--dirt", "#6b5743");
     root.setProperty("--dark-dirt", "#4e3b2e");
+    root.setProperty("--stone", "#6f6f6f");
+    root.setProperty("--stone-light", "#9a9a9a");
+    root.setProperty("--wood", "#8a6a2d");
     root.setProperty("--gold", "#d8c04a");
     root.setProperty("--diamond", "#74dede");
     root.setProperty("--redstone", "#ff6666");
+    root.setProperty("--panel", "#131713");
+    root.setProperty("--text", "#eef6e8");
+    root.setProperty("--muted", "#a5b0a2");
   } else if (themeName === "Phantom Attack") {
     root.setProperty("--bg", "#130b0e");
-    root.setProperty("--panel", "#1d1015");
-    root.setProperty("--panel-alt", "#150b0e");
-    root.setProperty("--border", "#603642");
-    root.setProperty("--text", "#fff0f0");
-    root.setProperty("--muted", "#ddb4bb");
     root.setProperty("--green", "#7fdb79");
     root.setProperty("--dark-green", "#2f522b");
     root.setProperty("--dirt", "#72503f");
     root.setProperty("--dark-dirt", "#4a3329");
+    root.setProperty("--stone", "#6c6466");
+    root.setProperty("--stone-light", "#9a9094");
+    root.setProperty("--wood", "#8a4a2d");
     root.setProperty("--gold", "#ffb84d");
     root.setProperty("--diamond", "#83e5e5");
     root.setProperty("--redstone", "#ff6a6a");
+    root.setProperty("--panel", "#1d1015");
+    root.setProperty("--text", "#fff0f0");
+    root.setProperty("--muted", "#ddb4bb");
   }
 }
 
@@ -149,6 +152,27 @@ function updateSurvivalLedger(maxExpenseAllowed) {
   } else {
     setStatus("Inventory secure. Resource levels look safe from threats.", true);
   }
+}
+
+function fillTerrainRows() {
+  var rows = [
+    { id: "gr1", type: "grass-block" },
+    { id: "gr2", type: "dirt-block" },
+    { id: "gr3", type: "dirt-block" },
+    { id: "gr4", type: "stone-block" }
+  ];
+
+  rows.forEach(function(row) {
+    var el = document.getElementById(row.id);
+    if (!el) return;
+    el.innerHTML = "";
+    var count = Math.ceil(window.innerWidth / 48) + 2;
+    for (var i = 0; i < count; i++) {
+      var block = document.createElement("div");
+      block.className = "block " + row.type;
+      el.appendChild(block);
+    }
+  });
 }
 
 themeDropdown.addEventListener("change", function() {
@@ -249,27 +273,6 @@ resetBtn.addEventListener("click", function() {
   refreshTotals();
   applyTheme(themeDropdown.value);
 });
-
-function fillTerrainRows() {
-  var rows = [
-    { id: "gr1", type: "grass-block" },
-    { id: "gr2", type: "dirt-block" },
-    { id: "gr3", type: "dirt-block" },
-    { id: "gr4", type: "stone-block" }
-  ];
-
-  rows.forEach(function(row) {
-    var el = document.getElementById(row.id);
-    if (!el) return;
-    el.innerHTML = "";
-    var count = Math.ceil(window.innerWidth / 48) + 2;
-    for (var i = 0; i < count; i++) {
-      var block = document.createElement("div");
-      block.className = "block " + row.type;
-      el.appendChild(block);
-    }
-  });
-}
 
 window.addEventListener("resize", fillTerrainRows);
 
