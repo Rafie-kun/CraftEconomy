@@ -32,6 +32,10 @@ function formatEmeralds(amount) {
   return amount.toFixed(2) + " Emeralds";
 }
 
+function syncReserveEcho() {
+  reserveEcho.textContent = formatEmeralds(Number(reserveInput.value || 0));
+}
+
 function setStatus(text, safeMode) {
   statusMessage.textContent = text;
   statusMessage.classList.toggle("safe", safeMode);
@@ -42,40 +46,55 @@ function applyTheme(themeName) {
   var root = document.documentElement.style;
 
   if (themeName === "Overworld") {
-    root.setProperty("--bg", "#d9f2c7");
-    root.setProperty("--card", "rgba(255,255,255,0.88)");
-    root.setProperty("--text", "#20311f");
-    root.setProperty("--muted", "#5a6b58");
-    root.setProperty("--primary", "#55ff55");
-    root.setProperty("--primary-text", "#1b1b1b");
-    root.setProperty("--safe", "#55ff55");
-    root.setProperty("--danger", "#ff5555");
+    root.setProperty("--bg", "#1a1f1a");
+    root.setProperty("--panel", "#1b1b1b");
+    root.setProperty("--panel-alt", "#141814");
+    root.setProperty("--border", "#485c46");
+    root.setProperty("--text", "#f0f5eb");
+    root.setProperty("--muted", "#a9b5a2");
+    root.setProperty("--green", "#5aac44");
+    root.setProperty("--dark-green", "#3d7a2e");
+    root.setProperty("--dirt", "#8b6340");
+    root.setProperty("--dark-dirt", "#6b4c30");
+    root.setProperty("--gold", "#ffd700");
+    root.setProperty("--diamond", "#4de6e6");
+    root.setProperty("--redstone", "#e03030");
   } else if (themeName === "Cave Night") {
-    root.setProperty("--bg", "#121212");
-    root.setProperty("--card", "rgba(28,28,28,0.92)");
-    root.setProperty("--text", "#e7e7e7");
-    root.setProperty("--muted", "#b7b7b7");
-    root.setProperty("--primary", "#4c6fff");
-    root.setProperty("--primary-text", "#ffffff");
-    root.setProperty("--safe", "#55ff55");
-    root.setProperty("--danger", "#ff5555");
+    root.setProperty("--bg", "#101410");
+    root.setProperty("--panel", "#121412");
+    root.setProperty("--panel-alt", "#0f110f");
+    root.setProperty("--border", "#3b4a39");
+    root.setProperty("--text", "#eef6e8");
+    root.setProperty("--muted", "#9db09a");
+    root.setProperty("--green", "#6dc15d");
+    root.setProperty("--dark-green", "#355c2b");
+    root.setProperty("--dirt", "#6b5743");
+    root.setProperty("--dark-dirt", "#4e3b2e");
+    root.setProperty("--gold", "#d8c04a");
+    root.setProperty("--diamond", "#74dede");
+    root.setProperty("--redstone", "#ff6666");
   } else if (themeName === "Phantom Attack") {
-    root.setProperty("--bg", "#2a0e15");
-    root.setProperty("--card", "rgba(40,16,23,0.94)");
-    root.setProperty("--text", "#ffe6e6");
-    root.setProperty("--muted", "#ffbbbb");
-    root.setProperty("--primary", "#ff5555");
-    root.setProperty("--primary-text", "#ffffff");
-    root.setProperty("--safe", "#55ff55");
-    root.setProperty("--danger", "#ff5555");
+    root.setProperty("--bg", "#130b0e");
+    root.setProperty("--panel", "#1d1015");
+    root.setProperty("--panel-alt", "#150b0e");
+    root.setProperty("--border", "#603642");
+    root.setProperty("--text", "#fff0f0");
+    root.setProperty("--muted", "#ddb4bb");
+    root.setProperty("--green", "#7fdb79");
+    root.setProperty("--dark-green", "#2f522b");
+    root.setProperty("--dirt", "#72503f");
+    root.setProperty("--dark-dirt", "#4a3329");
+    root.setProperty("--gold", "#ffb84d");
+    root.setProperty("--diamond", "#83e5e5");
+    root.setProperty("--redstone", "#ff6a6a");
   }
 }
 
 function refreshLedgerDisplay() {
-  var visualScrollText = "=== ADVENTURER BOOK & QUILL LEDGER ===\n\n";
+  var text = "=== ADVENTURER BOOK & QUILL LEDGER ===\n\n";
 
   for (var i = 0; i < lootAmountList.length; i++) {
-    visualScrollText +=
+    text +=
       "[" + typeList[i] + "] " +
       lootCategoryList[i] + " | " +
       ledgerNotesList[i] + " | " +
@@ -84,12 +103,13 @@ function refreshLedgerDisplay() {
       accountList[i] + "\n";
   }
 
-  ledgerDisplay.value = visualScrollText;
+  ledgerDisplay.value = text;
 }
 
 function refreshTotals() {
-  totalDisplay.textContent = "Wallet: " + formatEmeralds(inHandWallet) + " | Ender Chest: " + formatEmeralds(enderChestBank);
-  reserveEcho.textContent = formatEmeralds(Number(reserveInput.value || 0));
+  totalDisplay.textContent =
+    "Wallet: " + formatEmeralds(inHandWallet) + " | Ender Chest: " + formatEmeralds(enderChestBank);
+  syncReserveEcho();
 }
 
 function updateSurvivalLedger(maxExpenseAllowed) {
@@ -99,12 +119,13 @@ function updateSurvivalLedger(maxExpenseAllowed) {
 
   for (var i = 0; i < lootAmountList.length; i++) {
     if (lootAmountList[i] < 0) {
-      totalEmeraldsSpent += Math.abs(lootAmountList[i]);
+      var spent = Math.abs(lootAmountList[i]);
+      totalEmeraldsSpent += spent;
 
       if (accountList[i] === "In-Hand Wallet 💰") {
-        walletSpent += Math.abs(lootAmountList[i]);
+        walletSpent += spent;
       } else if (accountList[i] === "Ender Bank 🏦") {
-        bankSpent += Math.abs(lootAmountList[i]);
+        bankSpent += spent;
       }
     }
   }
@@ -119,19 +140,22 @@ function updateSurvivalLedger(maxExpenseAllowed) {
   bankRemainingDisplay.textContent = "Ender Chest: " + formatEmeralds(bankRemaining);
   totalSpentDisplay.textContent = "Total Spent: " + formatEmeralds(totalEmeraldsSpent);
   totalRemainingDisplay.textContent = "Emeralds Remaining: " + formatEmeralds(totalRemaining);
+
   refreshTotals();
   refreshLedgerDisplay();
 
   if (totalEmeraldsSpent > maxExpenseAllowed) {
-    setStatus("⚠️ PHANTOM ATTACK DANGER! Total expenses are too high!", false);
+    setStatus("PHANTOM ATTACK DANGER! Total expenses are too high!", false);
   } else {
-    setStatus("🛡️ Inventory secure. Resource levels look safe from threats.", true);
+    setStatus("Inventory secure. Resource levels look safe from threats.", true);
   }
 }
 
 themeDropdown.addEventListener("change", function() {
   applyTheme(themeDropdown.value);
 });
+
+reserveInput.addEventListener("input", syncReserveEcho);
 
 addExpenseBtn.addEventListener("click", function() {
   var actionSelected = typeDropdown.value;
@@ -215,7 +239,6 @@ resetBtn.addEventListener("click", function() {
   expenseInput.value = "";
   descriptionInput.value = "";
   ledgerDisplay.value = "--- LEDGER RESET ---";
-  refreshTotals();
   walletSpentDisplay.textContent = "In-Hand Wallet Spent: 0.00 Emeralds";
   bankSpentDisplay.textContent = "Ender Chest Spent: 0.00 Emeralds";
   walletRemainingDisplay.textContent = "In-Hand Wallet: 64.00 Emeralds";
@@ -223,11 +246,35 @@ resetBtn.addEventListener("click", function() {
   totalSpentDisplay.textContent = "Total Spent: 0.00 Emeralds";
   totalRemainingDisplay.textContent = "Emeralds Remaining: 320.00 Emeralds";
   setStatus("World reloaded! Log your items.", true);
-  applyTheme(themeDropdown.value);
   refreshTotals();
+  applyTheme(themeDropdown.value);
 });
 
+function fillTerrainRows() {
+  var rows = [
+    { id: "gr1", type: "grass-block" },
+    { id: "gr2", type: "dirt-block" },
+    { id: "gr3", type: "dirt-block" },
+    { id: "gr4", type: "stone-block" }
+  ];
+
+  rows.forEach(function(row) {
+    var el = document.getElementById(row.id);
+    if (!el) return;
+    el.innerHTML = "";
+    var count = Math.ceil(window.innerWidth / 48) + 2;
+    for (var i = 0; i < count; i++) {
+      var block = document.createElement("div");
+      block.className = "block " + row.type;
+      el.appendChild(block);
+    }
+  });
+}
+
+window.addEventListener("resize", fillTerrainRows);
+
 applyTheme(themeDropdown.value);
+fillTerrainRows();
 refreshTotals();
 refreshLedgerDisplay();
 setStatus("Set your Emerald reserve and begin tracking.", true);

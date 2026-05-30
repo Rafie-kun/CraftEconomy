@@ -4,174 +4,229 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CraftEconomy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="sky-overlay" aria-hidden="true"></div>
-  <div class="terrain terrain-top" aria-hidden="true"></div>
-  <div class="terrain terrain-bottom" aria-hidden="true"></div>
+  <nav class="pixel-box">
+    <div class="nav-logo">CRAFTECONOMY</div>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#ledger">Ledger</a></li>
+      <li><a href="#status">Status</a></li>
+    </ul>
+  </nav>
 
-  <main class="app-frame">
-    <section class="top-banner">
-      <div class="banner-left">
-        <div class="pixel-mark">C</div>
-        <div>
-          <p class="eyebrow">Minecraft Survival Ledger</p>
-          <h1>CraftEconomy</h1>
-          <p class="subcopy">
-            Track emeralds across your wallet, Ender Chest, and ledger in a blocky survival interface.
-          </p>
+  <header class="hero">
+    <div class="sky-layer"></div>
+    <div class="sun"></div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+
+    <div class="tree tree-1">
+      <div class="tree-leaves"></div>
+      <div class="tree-trunk"></div>
+    </div>
+    <div class="tree tree-2">
+      <div class="tree-leaves"></div>
+      <div class="tree-trunk"></div>
+    </div>
+    <div class="creeper">
+      <div class="creeper-head"></div>
+      <div class="creeper-body"></div>
+    </div>
+
+    <div class="terrain">
+      <div class="ground-row row1" id="gr1"></div>
+      <div class="ground-row row2" id="gr2"></div>
+      <div class="ground-row row3" id="gr3"></div>
+      <div class="ground-row row4" id="gr4"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-namebox pixel-box">
+        <div class="hero-kicker">Minecraft Survival Ledger</div>
+        <div class="hero-name">CraftEconomy</div>
+        <div class="hero-sub">
+          Track emeralds across your wallet, Ender Chest, and ledger in a blocky survival interface.
+        </div>
+        <div class="hero-badges">
+          <span class="chip chip-green">Server Online</span>
+          <span class="chip">Phantom Watch Active</span>
+          <span class="chip">AP CSP Ready</span>
         </div>
       </div>
 
-      <div class="banner-right">
-        <div class="server-status">
-          <span class="dot"></span>
-          Server Online
+      <div class="cta-buttons">
+        <a href="#ledger" class="mc-btn btn-green">Open Ledger</a>
+        <a href="#overview" class="mc-btn btn-blue">View Stats</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="pixel-divider"></div>
+
+  <main>
+    <section id="overview" class="section-wrap">
+      <div class="section-header">
+        <div class="section-icon icon-emerald"></div>
+        <div class="section-title">Overview / Inventory</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card pixel-box">
+          <div class="stat-icon">💎</div>
+          <div class="stat-value">EMERALDS</div>
+          <div class="stat-label">Currency</div>
         </div>
-        <div class="server-status muted">Phantom Watch Active</div>
-        <div class="server-status muted">AP CSP Create Task Ready</div>
+        <div class="stat-card pixel-box">
+          <div class="stat-icon">🏦</div>
+          <div class="stat-value">ENDER CHEST</div>
+          <div class="stat-label">Bank Vault</div>
+        </div>
+        <div class="stat-card pixel-box">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">IN-HAND</div>
+          <div class="stat-label">Wallet Balance</div>
+        </div>
+        <div class="stat-card pixel-box">
+          <div class="stat-icon">👻</div>
+          <div class="stat-value">PHANTOMS</div>
+          <div class="stat-label">Threat Level</div>
+        </div>
       </div>
     </section>
 
-    <section class="overview-row">
-      <div class="overview-card grass-card">
-        <span class="overview-label">Currency</span>
-        <strong>Emeralds</strong>
+    <div class="pixel-divider"></div>
+
+    <section id="ledger" class="section-wrap">
+      <div class="section-header">
+        <div class="section-icon icon-gold"></div>
+        <div class="section-title">Ledger Console / Control Panel</div>
       </div>
-      <div class="overview-card stone-card">
-        <span class="overview-label">Safe Zone</span>
-        <strong>Overworld</strong>
+
+      <div class="ledger-panel pixel-box">
+        <div class="ledger-grid">
+          <div class="ledger-left">
+            <div class="ledger-title">Manage transactions like a survival server panel</div>
+            <div class="ledger-sub">Use the selectors below to log expenses, income, or transfers.</div>
+
+            <label>
+              Transaction Type
+              <select id="typeDropdown">
+                <option>Expense</option>
+                <option>Income</option>
+                <option>Transfer</option>
+              </select>
+            </label>
+
+            <label>
+              Account
+              <select id="accountDropdown">
+                <option>In-Hand Wallet 💰</option>
+                <option>Ender Bank 🏦</option>
+              </select>
+            </label>
+
+            <label>
+              Category
+              <select id="categoryDropdown">
+                <option>Food 🥩</option>
+                <option>Village Taxes 📜</option>
+                <option>Redstone Data 📱</option>
+                <option>Anvil Repair 🔨</option>
+              </select>
+            </label>
+
+            <label>
+              Emerald Amount
+              <input id="expenseInput" type="number" min="0" step="0.01" placeholder="Enter emerald amount">
+            </label>
+
+            <label>
+              Description
+              <input id="descriptionInput" type="text" placeholder="What did you buy or move?">
+            </label>
+
+            <label>
+              Reserve Goal
+              <input id="reserveInput" type="number" min="0" step="0.01" value="150">
+            </label>
+
+            <label>
+              Theme
+              <select id="themeDropdown">
+                <option>Overworld</option>
+                <option>Cave Night</option>
+                <option>Phantom Attack</option>
+              </select>
+            </label>
+
+            <div class="button-row">
+              <button id="addExpenseBtn" class="mc-btn btn-green" type="button">Add Expense</button>
+              <button id="resetBtn" class="mc-btn btn-dark" type="button">Clear Data</button>
+            </div>
+          </div>
+
+          <div class="ledger-right">
+            <div class="scoreboard pixel-box">
+              <div id="totalDisplay" class="score-main">Wallet: 64.00 Emeralds | Ender Chest: 256.00 Emeralds</div>
+              <div class="score-grid">
+                <div class="score-card">
+                  <span>In-Hand Wallet</span>
+                  <strong id="walletRemainingDisplay">64.00 Emeralds</strong>
+                </div>
+                <div class="score-card">
+                  <span>Ender Chest</span>
+                  <strong id="bankRemainingDisplay">256.00 Emeralds</strong>
+                </div>
+                <div class="score-card">
+                  <span>Total Spent</span>
+                  <strong id="totalSpentDisplay">0.00 Emeralds</strong>
+                </div>
+                <div class="score-card">
+                  <span>Emeralds Remaining</span>
+                  <strong id="totalRemainingDisplay">320.00 Emeralds</strong>
+                </div>
+              </div>
+              <div class="reserve-readout">
+                Reserve Goal: <span id="reserveEcho">150.00 Emeralds</span>
+              </div>
+            </div>
+
+            <div class="ledger-box pixel-box">
+              <div class="ledger-topbar">
+                <span>Adventure Ledger</span>
+                <span>Live Transaction Feed</span>
+              </div>
+              <textarea id="ledgerDisplay" readonly spellcheck="false">--- LEDGER READY ---</textarea>
+            </div>
+
+            <div class="bottom-row">
+              <div class="mini-stat pixel-box">
+                <span>Wallet Spent</span>
+                <strong id="walletSpentDisplay">0.00 Emeralds</strong>
+              </div>
+              <div class="mini-stat pixel-box">
+                <span>Ender Chest Spent</span>
+                <strong id="bankSpentDisplay">0.00 Emeralds</strong>
+              </div>
+            </div>
+
+            <div id="statusMessage" class="status safe pixel-box">Set your Emerald reserve and begin tracking.</div>
+          </div>
+        </div>
       </div>
-      <div class="overview-card nether-card">
-        <span class="overview-label">Danger State</span>
-        <strong>Phantom Attack</strong>
-      </div>
-      <div class="overview-card inventory-card">
-        <span class="overview-label">Reserve Goal</span>
-        <strong id="reserveEcho">150 Emeralds</strong>
-      </div>
-    </section>
-
-    <section class="main-layout">
-      <aside class="side-panel">
-        <div class="panel-title">Quick Stats</div>
-
-        <div class="stat-block main-total" id="totalDisplay">
-          Wallet: 64.00 Emeralds | Ender Chest: 256.00 Emeralds
-        </div>
-
-        <div class="mini-grid">
-          <div class="mini-card">
-            <span>In-Hand Wallet</span>
-            <strong id="walletRemainingDisplay">64.00 Emeralds</strong>
-          </div>
-          <div class="mini-card">
-            <span>Ender Chest</span>
-            <strong id="bankRemainingDisplay">256.00 Emeralds</strong>
-          </div>
-          <div class="mini-card">
-            <span>Total Spent</span>
-            <strong id="totalSpentDisplay">0.00 Emeralds</strong>
-          </div>
-          <div class="mini-card">
-            <span>Emeralds Remaining</span>
-            <strong id="totalRemainingDisplay">320.00 Emeralds</strong>
-          </div>
-        </div>
-
-        <div class="panel-title">Status</div>
-        <div id="statusMessage" class="status safe">Set your Emerald reserve and begin tracking.</div>
-      </aside>
-
-      <section class="console-panel">
-        <div class="console-header">
-          <div>
-            <p class="panel-kicker">Ledger Console</p>
-            <h2>Manage transactions like a survival server panel</h2>
-          </div>
-          <div class="console-chip">Phantom Watch Enabled</div>
-        </div>
-
-        <div class="controls">
-          <label>
-            Transaction Type
-            <select id="typeDropdown">
-              <option>Expense</option>
-              <option>Income</option>
-              <option>Transfer</option>
-            </select>
-          </label>
-
-          <label>
-            Account
-            <select id="accountDropdown">
-              <option>In-Hand Wallet 💰</option>
-              <option>Ender Bank 🏦</option>
-            </select>
-          </label>
-
-          <label>
-            Category
-            <select id="categoryDropdown">
-              <option>Food 🥩</option>
-              <option>Village Taxes 📜</option>
-              <option>Redstone Data 📱</option>
-              <option>Anvil Repair 🔨</option>
-            </select>
-          </label>
-
-          <label>
-            Emerald Amount
-            <input id="expenseInput" type="number" min="0" step="0.01" placeholder="Enter emerald amount">
-          </label>
-
-          <label>
-            Description
-            <input id="descriptionInput" type="text" placeholder="What did you buy or move?">
-          </label>
-
-          <label>
-            Reserve Goal
-            <input id="reserveInput" type="number" min="0" step="0.01" value="150">
-          </label>
-
-          <label>
-            Theme
-            <select id="themeDropdown">
-              <option>Overworld</option>
-              <option>Cave Night</option>
-              <option>Phantom Attack</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="button-row">
-          <button id="addExpenseBtn" class="primary-btn">Add Expense</button>
-          <button id="resetBtn" class="secondary-btn">Clear Data</button>
-        </div>
-
-        <div class="ledger-wrapper">
-          <div class="ledger-topbar">
-            <span>Adventure Ledger</span>
-            <span>Live Transaction Feed</span>
-          </div>
-          <textarea id="ledgerDisplay" readonly spellcheck="false">--- LEDGER READY ---</textarea>
-        </div>
-
-        <div class="log-row">
-          <div class="log-card">
-            <span class="log-label">Wallet Spent</span>
-            <strong id="walletSpentDisplay">0.00 Emeralds</strong>
-          </div>
-          <div class="log-card">
-            <span class="log-label">Ender Chest Spent</span>
-            <strong id="bankSpentDisplay">0.00 Emeralds</strong>
-          </div>
-        </div>
-      </section>
     </section>
   </main>
+
+  <div class="pixel-divider"></div>
+
+  <footer class="footer-box pixel-box">
+    CraftEconomy | Built block by block for the AP CSP Create Task
+  </footer>
 
   <script src="script.js"></script>
 </body>
