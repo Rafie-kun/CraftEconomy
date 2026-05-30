@@ -1,16 +1,15 @@
 :root {
-  --bg: #09130b;
-  --bg-soft: #0f1f13;
-  --panel: rgba(16, 28, 18, 0.86);
-  --panel-strong: rgba(13, 23, 15, 0.96);
-  --line: rgba(157, 219, 172, 0.14);
-  --text: #e8f7ea;
-  --muted: #9fb8a5;
-  --primary: #55ff55;
-  --primary-deep: #1f9f3d;
-  --danger: #ff5555;
-  --accent: #7cf7c0;
-  --shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  --bg: #0d120d;
+  --panel: #141d14;
+  --panel-2: #1b261b;
+  --line: #3f563f;
+  --text: #eef6e6;
+  --muted: #b3c5ab;
+  --primary: #6ee56e;
+  --primary-deep: #247f3f;
+  --danger: #ff6b6b;
+  --accent: #a7f7c2;
+  --shadow: 0 22px 0 rgba(0, 0, 0, 0.32), 0 30px 60px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -27,9 +26,10 @@ body {
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 20% 10%, rgba(122, 247, 192, 0.18), transparent 26%),
-    radial-gradient(circle at 80% 20%, rgba(85, 255, 85, 0.14), transparent 24%),
-    linear-gradient(180deg, #111f14 0%, #081009 100%);
+    linear-gradient(180deg, rgba(15, 24, 15, 0.92), rgba(15, 24, 15, 0.92)),
+    radial-gradient(circle at 20% 10%, rgba(122, 247, 192, 0.10), transparent 26%),
+    radial-gradient(circle at 80% 20%, rgba(85, 255, 85, 0.08), transparent 24%),
+    linear-gradient(180deg, #1c2318 0%, #0a0f09 100%);
   overflow-x: hidden;
 }
 
@@ -37,12 +37,12 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.13;
+  opacity: 0.10;
   background-image:
     linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
   background-size: 42px 42px;
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.9));
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.92));
 }
 
 .bg-glow {
@@ -69,7 +69,7 @@ body {
 
 .page-shell {
   width: min(1380px, calc(100% - 32px));
-  margin: 24px auto 44px;
+  margin: 22px auto 40px;
 }
 
 .hero-panel {
@@ -84,17 +84,34 @@ body {
 .hero-art,
 .sidebar-panel,
 .main-panel {
-  background: var(--panel);
-  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 3px solid var(--line);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
 }
 
 .hero-copy {
-  border-radius: 30px;
+  border-radius: 24px;
   padding: 30px;
   position: relative;
   overflow: hidden;
+}
+
+.hero-copy::before,
+.hero-art::before,
+.sidebar-panel::before,
+.main-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.18;
+  mix-blend-mode: screen;
 }
 
 .hero-copy::after {
@@ -117,12 +134,14 @@ body {
   height: 58px;
   display: grid;
   place-items: center;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(85,255,85,0.95), rgba(31,159,61,0.96));
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(146, 255, 146, 0.98), rgba(80, 190, 80, 0.98));
   color: #071008;
   font-size: 1.65rem;
   font-weight: 900;
-  box-shadow: 0 14px 30px rgba(85, 255, 85, 0.25);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.18), 0 12px 26px rgba(85, 255, 85, 0.20);
+  border: 2px solid rgba(0,0,0,0.35);
 }
 
 .eyebrow,
@@ -138,6 +157,7 @@ h1 {
   margin: 0;
   font-size: clamp(2.6rem, 6vw, 4.6rem);
   line-height: 0.95;
+  letter-spacing: -0.03em;
 }
 
 .hero-text {
@@ -161,8 +181,8 @@ h1 {
   gap: 8px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(85, 255, 85, 0.12);
-  border: 1px solid rgba(85, 255, 85, 0.22);
+  background: rgba(85, 255, 85, 0.10);
+  border: 2px solid rgba(85, 255, 85, 0.20);
   color: #d9ffe0;
   font-weight: 700;
   font-size: 0.93rem;
@@ -191,9 +211,12 @@ h1 {
 
 .badge-card {
   padding: 16px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)),
+    rgba(8, 14, 8, 0.72);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.05);
 }
 
 .badge-label {
@@ -209,7 +232,7 @@ h1 {
 
 .hero-art {
   position: relative;
-  border-radius: 30px;
+  border-radius: 24px;
   min-height: 360px;
   padding: 24px;
   overflow: hidden;
@@ -240,12 +263,12 @@ h1 {
 .server-card {
   position: relative;
   height: 100%;
-  border-radius: 26px;
+  border-radius: 18px;
   padding: 18px;
   background:
-    linear-gradient(180deg, rgba(19, 35, 22, 0.92), rgba(8, 13, 10, 0.98)),
+    linear-gradient(180deg, rgba(19, 29, 18, 0.96), rgba(8, 13, 10, 0.99)),
     linear-gradient(135deg, rgba(85,255,85,0.12), transparent 45%);
-  border: 1px solid rgba(124, 247, 192, 0.15);
+  border: 3px solid rgba(124, 247, 192, 0.12);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -269,7 +292,7 @@ h1 {
   padding: 10px 14px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.08);
   color: var(--muted);
   font-weight: 700;
   font-size: 0.88rem;
@@ -285,9 +308,11 @@ h1 {
 }
 
 .layer {
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(90deg, rgba(85,255,85,0.08), rgba(255,255,255,0.02));
+  border-radius: 14px;
+  border: 3px solid rgba(255, 255, 255, 0.05);
+  background:
+    linear-gradient(180deg, rgba(85,255,85,0.10), rgba(255,255,255,0.02)),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.15) 0 10px, rgba(255,255,255,0.05) 10px 20px);
 }
 
 .layer-1 {
@@ -312,23 +337,24 @@ h1 {
 
 .dashboard-shell {
   display: grid;
-  grid-template-columns: 350px minmax(0, 1fr);
+  grid-template-columns: 360px minmax(0, 1fr);
   gap: 24px;
 }
 
 .sidebar-panel {
-  border-radius: 28px;
+  border-radius: 24px;
   padding: 22px;
   display: grid;
   gap: 18px;
   align-self: start;
+  position: relative;
 }
 
 .sidebar-section {
   padding: 18px;
-  border-radius: 22px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.06);
 }
 
 .main-total {
@@ -346,9 +372,11 @@ h1 {
 .mini-card,
 .log-card {
   padding: 14px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)),
+    rgba(8, 14, 8, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.08);
 }
 
 .mini-card span,
@@ -366,10 +394,10 @@ h1 {
 
 .status {
   padding: 16px;
-  border-radius: 18px;
+  border-radius: 14px;
   font-weight: 900;
   line-height: 1.5;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
 }
 
 .status.safe {
@@ -385,8 +413,9 @@ h1 {
 }
 
 .main-panel {
-  border-radius: 28px;
+  border-radius: 24px;
   padding: 24px;
+  position: relative;
 }
 
 .panel-header {
@@ -417,6 +446,7 @@ label {
   gap: 8px;
   font-weight: 800;
   color: var(--text);
+  text-transform: none;
 }
 
 input,
@@ -424,9 +454,9 @@ select,
 textarea {
   width: 100%;
   padding: 13px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text);
   font: inherit;
   transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
@@ -469,20 +499,20 @@ button:hover {
 }
 
 .primary-btn {
-  background: linear-gradient(180deg, #6bff6b, #2bc54d);
+  background: linear-gradient(180deg, #79ff79, #30b850);
   color: #06110a;
   box-shadow: 0 16px 30px rgba(43, 197, 77, 0.25);
 }
 
 .secondary-btn {
-  background: linear-gradient(180deg, #26313e, #161d26);
+  background: linear-gradient(180deg, #2a3429, #131913);
   color: #eef7f0;
 }
 
 .ledger-shell {
   margin-top: 22px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.08);
   background: rgba(8, 14, 10, 0.98);
   overflow: hidden;
 }
@@ -525,6 +555,24 @@ button:hover {
   margin-top: 14px;
 }
 
+.main-panel,
+.sidebar-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.main-panel::after,
+.sidebar-panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12px;
+  background: linear-gradient(90deg, var(--primary-deep), var(--primary), var(--primary-deep));
+  opacity: 0.5;
+}
+
 @media (max-width: 1080px) {
   .hero-panel,
   .dashboard-shell {
@@ -550,7 +598,7 @@ button:hover {
   .hero-art,
   .sidebar-panel,
   .main-panel {
-    border-radius: 22px;
+    border-radius: 18px;
   }
 
   .controls,
