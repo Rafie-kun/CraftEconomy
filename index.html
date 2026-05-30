@@ -7,83 +7,61 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+  <div class="sky-overlay" aria-hidden="true"></div>
+  <div class="terrain terrain-top" aria-hidden="true"></div>
+  <div class="terrain terrain-bottom" aria-hidden="true"></div>
 
-  <main class="page-shell">
-    <section class="hero-panel">
-      <div class="hero-copy">
-        <div class="brand-row">
-          <span class="brand-mark">C</span>
-          <div>
-            <p class="eyebrow">Minecraft Survival Ledger</p>
-            <h1>CraftEconomy</h1>
-          </div>
-        </div>
-
-        <p class="hero-text">
-          Track emeralds across your wallet, Ender Chest, and ledger in a game-inspired control panel.
-        </p>
-
-        <div class="status-strip">
-          <div class="status-chip">
-            <span class="chip-dot"></span>
-            Server Online
-          </div>
-          <div class="status-chip muted">
-            AP CSP Create Task Ready
-          </div>
-          <div class="status-chip muted">
-            Phantom Threat Monitor
-          </div>
-        </div>
-
-        <div class="hero-badges">
-          <div class="badge-card">
-            <span class="badge-label">Currency</span>
-            <strong>Emeralds</strong>
-          </div>
-          <div class="badge-card">
-            <span class="badge-label">Safe Zone</span>
-            <strong>Overworld</strong>
-          </div>
-          <div class="badge-card">
-            <span class="badge-label">Danger State</span>
-            <strong>Phantom Attack</strong>
-          </div>
+  <main class="app-frame">
+    <section class="top-banner">
+      <div class="banner-left">
+        <div class="pixel-mark">C</div>
+        <div>
+          <p class="eyebrow">Minecraft Survival Ledger</p>
+          <h1>CraftEconomy</h1>
+          <p class="subcopy">
+            Track emeralds across your wallet, Ender Chest, and ledger in a blocky survival interface.
+          </p>
         </div>
       </div>
 
-      <div class="hero-art">
-        <div class="orb orb-one"></div>
-        <div class="orb orb-two"></div>
-        <div class="server-card">
-          <div class="server-card-top">
-            <span class="server-badge">Live Control Panel</span>
-            <span class="server-ping">12 ms</span>
-          </div>
-          <div class="server-layers">
-            <div class="layer layer-1"></div>
-            <div class="layer layer-2"></div>
-            <div class="layer layer-3"></div>
-          </div>
-          <div class="server-card-bottom">
-            <span>Wallet + Ender Chest tracking</span>
-            <span>Built for demo clarity</span>
-          </div>
+      <div class="banner-right">
+        <div class="server-status">
+          <span class="dot"></span>
+          Server Online
         </div>
+        <div class="server-status muted">Phantom Watch Active</div>
+        <div class="server-status muted">AP CSP Create Task Ready</div>
       </div>
     </section>
 
-    <section class="dashboard-shell">
-      <aside class="sidebar-panel">
-        <div class="sidebar-section">
-          <p class="section-label">Quick Stats</p>
-          <div id="totalDisplay" class="main-total">Wallet: 64.00 Emeralds | Ender Chest: 256.00 Emeralds</div>
+    <section class="overview-row">
+      <div class="overview-card grass-card">
+        <span class="overview-label">Currency</span>
+        <strong>Emeralds</strong>
+      </div>
+      <div class="overview-card stone-card">
+        <span class="overview-label">Safe Zone</span>
+        <strong>Overworld</strong>
+      </div>
+      <div class="overview-card nether-card">
+        <span class="overview-label">Danger State</span>
+        <strong>Phantom Attack</strong>
+      </div>
+      <div class="overview-card inventory-card">
+        <span class="overview-label">Reserve Goal</span>
+        <strong id="reserveEcho">150 Emeralds</strong>
+      </div>
+    </section>
+
+    <section class="main-layout">
+      <aside class="side-panel">
+        <div class="panel-title">Quick Stats</div>
+
+        <div class="stat-block main-total" id="totalDisplay">
+          Wallet: 64.00 Emeralds | Ender Chest: 256.00 Emeralds
         </div>
 
-        <div class="sidebar-section mini-grid">
+        <div class="mini-grid">
           <div class="mini-card">
             <span>In-Hand Wallet</span>
             <strong id="walletRemainingDisplay">64.00 Emeralds</strong>
@@ -97,24 +75,22 @@
             <strong id="totalSpentDisplay">0.00 Emeralds</strong>
           </div>
           <div class="mini-card">
-            <span>Reserve Left</span>
+            <span>Emeralds Remaining</span>
             <strong id="totalRemainingDisplay">320.00 Emeralds</strong>
           </div>
         </div>
 
-        <div class="sidebar-section">
-          <p class="section-label">Status</p>
-          <div id="statusMessage" class="status safe">Set your Emerald reserve and begin tracking.</div>
-        </div>
+        <div class="panel-title">Status</div>
+        <div id="statusMessage" class="status safe">Set your Emerald reserve and begin tracking.</div>
       </aside>
 
-      <section class="main-panel">
-        <div class="panel-header">
+      <section class="console-panel">
+        <div class="console-header">
           <div>
-            <p class="section-label">Ledger Console</p>
+            <p class="panel-kicker">Ledger Console</p>
             <h2>Manage transactions like a survival server panel</h2>
           </div>
-          <div class="panel-pill">Phantom Watch Enabled</div>
+          <div class="console-chip">Phantom Watch Enabled</div>
         </div>
 
         <div class="controls">
@@ -175,15 +151,15 @@
           <button id="resetBtn" class="secondary-btn">Clear Data</button>
         </div>
 
-        <div class="ledger-shell">
-          <div class="ledger-header">
-            <span class="ledger-title">Adventure Ledger</span>
-            <span class="ledger-subtitle">Ledger entries appear here in real time</span>
+        <div class="ledger-wrapper">
+          <div class="ledger-topbar">
+            <span>Adventure Ledger</span>
+            <span>Live Transaction Feed</span>
           </div>
           <textarea id="ledgerDisplay" readonly spellcheck="false">--- LEDGER READY ---</textarea>
         </div>
 
-        <div class="log-strip">
+        <div class="log-row">
           <div class="log-card">
             <span class="log-label">Wallet Spent</span>
             <strong id="walletSpentDisplay">0.00 Emeralds</strong>

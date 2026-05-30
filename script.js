@@ -26,6 +26,7 @@ var walletRemainingDisplay = document.getElementById("walletRemainingDisplay");
 var bankRemainingDisplay = document.getElementById("bankRemainingDisplay");
 var totalSpentDisplay = document.getElementById("totalSpentDisplay");
 var totalRemainingDisplay = document.getElementById("totalRemainingDisplay");
+var reserveEcho = document.getElementById("reserveEcho");
 
 function formatEmeralds(amount) {
   return amount.toFixed(2) + " Emeralds";
@@ -88,6 +89,7 @@ function refreshLedgerDisplay() {
 
 function refreshTotals() {
   totalDisplay.textContent = "Wallet: " + formatEmeralds(inHandWallet) + " | Ender Chest: " + formatEmeralds(enderChestBank);
+  reserveEcho.textContent = formatEmeralds(Number(reserveInput.value || 0));
 }
 
 function updateSurvivalLedger(maxExpenseAllowed) {
@@ -222,6 +224,7 @@ resetBtn.addEventListener("click", function() {
   totalRemainingDisplay.textContent = "Emeralds Remaining: 320.00 Emeralds";
   setStatus("World reloaded! Log your items.", true);
   applyTheme(themeDropdown.value);
+  refreshTotals();
 });
 
 applyTheme(themeDropdown.value);
