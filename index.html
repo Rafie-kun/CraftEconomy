@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
   <nav class="pixel-box site-nav">
@@ -169,6 +169,7 @@
 
             <div class="button-row">
               <button id="addExpenseBtn" class="mc-btn btn-green" type="button">Add Expense</button>
+              <button id="mineButton" class="mc-btn btn-blue" type="button">Next Day / Mine Next Block</button>
               <button id="resetBtn" class="mc-btn btn-dark" type="button">Clear Data</button>
             </div>
           </div>
@@ -193,6 +194,33 @@
                   <span>Emeralds Remaining</span>
                   <strong id="totalRemainingDisplay">320.00 Emeralds</strong>
                 </div>
+              </div>
+            </div>
+
+            <div class="durability-shell pixel-box">
+              <div class="durability-head">
+                <span>Tool Durability</span>
+                <span id="durabilityPercentText">100%</span>
+              </div>
+              <div class="durability-track">
+                <div id="durabilityBar" class="durability-fill"></div>
+              </div>
+            </div>
+
+            <div class="analysis-shell pixel-box">
+              <div class="analysis-head">Category Audit</div>
+              <label>
+                Analyze Category
+                <select id="analyzeCategoryDropdown">
+                  <option>Food 🥩</option>
+                  <option>Village Taxes 📜</option>
+                  <option>Redstone Data 📱</option>
+                  <option>Anvil Repair 🔨</option>
+                  <option>Villager Interest 📈</option>
+                </select>
+              </label>
+              <div id="categoryTotalDisplay" class="analysis-output">
+                Total spent on Food 🥩: 0.00 Emeralds
               </div>
             </div>
 
@@ -238,6 +266,6 @@
     CraftEconomy | Built block by block for AP CSP
   </footer>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

@@ -11,11 +11,13 @@ var phantomDangerLimit = 150;
 var typeDropdown = document.getElementById("typeDropdown");
 var accountDropdown = document.getElementById("accountDropdown");
 var categoryDropdown = document.getElementById("categoryDropdown");
+var analyzeCategoryDropdown = document.getElementById("analyzeCategoryDropdown");
 var expenseInput = document.getElementById("expenseInput");
 var descriptionInput = document.getElementById("descriptionInput");
 var reserveInput = document.getElementById("reserveInput");
 var themeDropdown = document.getElementById("themeDropdown");
 var addExpenseBtn = document.getElementById("addExpenseBtn");
+var mineButton = document.getElementById("mineButton");
 var resetBtn = document.getElementById("resetBtn");
 var totalDisplay = document.getElementById("totalDisplay");
 var ledgerDisplay = document.getElementById("ledgerDisplay");
@@ -27,6 +29,9 @@ var bankRemainingDisplay = document.getElementById("bankRemainingDisplay");
 var totalSpentDisplay = document.getElementById("totalSpentDisplay");
 var totalRemainingDisplay = document.getElementById("totalRemainingDisplay");
 var reserveEcho = document.getElementById("reserveEcho");
+var categoryTotalDisplay = document.getElementById("categoryTotalDisplay");
+var durabilityBar = document.getElementById("durabilityBar");
+var durabilityPercentText = document.getElementById("durabilityPercentText");
 
 function formatEmeralds(amount) {
   return amount.toFixed(2) + " Emeralds";
@@ -115,6 +120,45 @@ function refreshTotals() {
   syncReserveEcho();
 }
 
+function updateDurability(totalEmeraldsSpent, maxExpenseAllowed) {
+  var percentageLeft = (maxExpenseAllowed - totalEmeraldsSpent) / maxExpenseAllowed;
+  if (percentageLeft < 0) {
+    percentageLeft = 0;
+  }
+
+  var newWidth = Math.round(200 * percentageLeft);
+  if (newWidth < 0) {
+    newWidth = 0;
+  }
+
+  durabilityBar.style.width = newWidth + "px";
+  durabilityPercentText.textContent = Math.round(percentageLeft * 100) + "%";
+  durabilityBar.classList.remove("durability-crack", "durability-flash");
+
+  if (percentageLeft < 0.2) {
+    durabilityBar.style.backgroundColor = "#ff5555";
+    durabilityBar.classList.add("durability-crack", "durability-flash");
+  } else if (percentageLeft < 0.5) {
+    durabilityBar.style.backgroundColor = "#ffaa00";
+    durabilityBar.classList.add("durability-crack");
+  } else {
+    durabilityBar.style.backgroundColor = "#55ff55";
+  }
+}
+
+function updateCategoryAnalysis() {
+  var target = analyzeCategoryDropdown.value;
+  var subTotal = 0;
+
+  for (var i = 0; i < lootCategoryList.length; i++) {
+    if (lootCategoryList[i] === target) {
+      subTotal += Math.abs(lootAmountList[i]);
+    }
+  }
+
+  categoryTotalDisplay.textContent = "Total spent on " + target + ": " + formatEmeralds(subTotal);
+}
+
 function updateSurvivalLedger(maxExpenseAllowed) {
   var totalEmeraldsSpent = 0;
   var walletSpent = 0;
@@ -144,8 +188,10 @@ function updateSurvivalLedger(maxExpenseAllowed) {
   totalSpentDisplay.textContent = "Total Spent: " + formatEmeralds(totalEmeraldsSpent);
   totalRemainingDisplay.textContent = "Emeralds Remaining: " + formatEmeralds(totalRemaining);
 
+  updateDurability(totalEmeraldsSpent, maxExpenseAllowed);
   refreshTotals();
   refreshLedgerDisplay();
+  updateCategoryAnalysis();
 
   if (totalEmeraldsSpent > maxExpenseAllowed) {
     setStatus("PHANTOM ATTACK DANGER! Total expenses are too high!", false);
@@ -180,6 +226,8 @@ themeDropdown.addEventListener("change", function() {
 });
 
 reserveInput.addEventListener("input", syncReserveEcho);
+
+analyzeCategoryDropdown.addEventListener("change", updateCategoryAnalysis);
 
 addExpenseBtn.addEventListener("click", function() {
   var actionSelected = typeDropdown.value;
@@ -251,6 +299,19 @@ addExpenseBtn.addEventListener("click", function() {
   updateSurvivalLedger(phantomDangerLimit);
 });
 
+mineButton.addEventListener("click", function() {
+  var interestGained = Math.round(enderChestBank * 0.05);
+  enderChestBank += interestGained;
+
+  lootAmountList.push(interestGained);
+  lootCategoryList.push("Villager Interest 📈");
+  ledgerNotesList.push("Ender Chest growth compound");
+  accountList.push("Ender Bank 🏦");
+  typeList.push("Income");
+
+  updateSurvivalLedger(phantomDangerLimit);
+});
+
 resetBtn.addEventListener("click", function() {
   lootAmountList = [];
   lootCategoryList = [];
@@ -269,6 +330,11 @@ resetBtn.addEventListener("click", function() {
   bankRemainingDisplay.textContent = "Ender Chest: 256.00 Emeralds";
   totalSpentDisplay.textContent = "Total Spent: 0.00 Emeralds";
   totalRemainingDisplay.textContent = "Emeralds Remaining: 320.00 Emeralds";
+  categoryTotalDisplay.textContent = "Total spent on " + analyzeCategoryDropdown.value + ": 0.00 Emeralds";
+  durabilityBar.style.width = "200px";
+  durabilityBar.style.backgroundColor = "#55ff55";
+  durabilityBar.classList.remove("durability-crack", "durability-flash");
+  durabilityPercentText.textContent = "100%";
   setStatus("World reloaded! Log your items.", true);
   refreshTotals();
   applyTheme(themeDropdown.value);
@@ -280,4 +346,6 @@ applyTheme(themeDropdown.value);
 fillTerrainRows();
 refreshTotals();
 refreshLedgerDisplay();
+updateCategoryAnalysis();
+updateDurability(0, phantomDangerLimit);
 setStatus("Set your Emerald reserve and begin tracking.", true);
