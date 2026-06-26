@@ -1,65 +1,20 @@
-# CraftEconomy
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Minecraft-themed survival ledger and inventory tracker.
+# Run and deploy your AI Studio app
 
-## Live Version
+This contains everything you need to run your app locally.
 
-This repo is set up for **GitHub Pages** using the plain web app files:
+View your app in AI Studio: https://ai.studio/apps/f3fe1199-2976-4fdf-8dc3-810fd0b98b79
 
-- `index.html`
-- `style.css`
-- `script.js`
+## Run Locally
 
-## Archive Files
+**Prerequisites:**  Node.js
 
-These files are kept as reference material from the App Lab version:
 
-- `app_lab_code.js`
-- `BLUEPRINT.md`
-- `GITHUB_UPLOAD_GUIDE.md`
-
-## What the app does
-
-- tracks Emeralds as the currency
-- tracks transactions with a ledger
-- separates money between `In-Hand Wallet 💰` and `Ender Bank 🏦`
-- uses categories like:
-  - `Food 🥩`
-  - `Village Taxes 📜`
-  - `Redstone Data 📱`
-  - `Anvil Repair 🔨`
-- shows a safe green status or a red Phantom Attack Danger warning
-
-## How to run locally
-
-Open `index.html` in a browser or use a local server if you want a more reliable preview.
-
-## How to host on GitHub Pages
-
-1. Push this repo to GitHub.
-2. Go to the repository settings.
-3. Open the **Pages** section.
-4. Set the source to the branch that contains `index.html` and the root folder.
-5. Save the settings.
-6. Wait for GitHub to publish the site.
-
-## Recommended upload set
-
-If you only want the live website files, upload:
-
-- `index.html`
-- `style.css`
-- `script.js`
-
-If you want the full project archive too, also include:
-
-- `README.md`
-- `BLUEPRINT.md`
-- `GITHUB_UPLOAD_GUIDE.md`
-- `app_lab_code.js`
-
-## Notes
-
-- Keep the dropdown option text exact.
-- Keep the IDs unchanged if you edit the code.
-- The App Lab file is preserved for reference, but GitHub Pages will use `index.html`.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
