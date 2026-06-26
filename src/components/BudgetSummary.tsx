@@ -251,6 +251,60 @@ export default function BudgetSummary({ profile }: BudgetSummaryProps) {
         </div>
       </div>
 
+      {/* Target Savings Goal Progress Bar (styled as Minecraft XP Bar) */}
+      {academic.targetSavingsGoal !== undefined && academic.targetSavingsGoal > 0 && (
+        <div id="savings-goal-container" className="mc-gui p-5 rounded-none flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div className="flex items-center gap-2">
+              {/* Custom Level Star Icon (Minecraft Style) */}
+              <div className="mc-hotbar-slot shrink-0 w-8 h-8 flex items-center justify-center bg-stone-700">
+                <svg width="18" height="18" viewBox="0 0 9 9" fill="none" style={{ imageRendering: "pixelated" }}>
+                  <rect x="4" y="0" width="1" height="9" fill="#ffff55" />
+                  <rect x="0" y="4" width="9" height="1" fill="#ffff55" />
+                  <rect x="2" y="2" width="5" height="5" fill="#ffff55" />
+                  <rect x="3" y="1" width="3" height="7" fill="#ffff55" />
+                  <rect x="1" y="3" width="7" height="3" fill="#ffff55" />
+                  {/* Outer Outline */}
+                  <rect x="3" y="0" width="1" height="1" fill="#000000" />
+                  <rect x="5" y="0" width="1" height="1" fill="#000000" />
+                  <rect x="0" y="3" width="1" height="1" fill="#000000" />
+                  <rect x="0" y="5" width="1" height="1" fill="#000000" />
+                  <rect x="8" y="3" width="1" height="1" fill="#000000" />
+                  <rect x="8" y="5" width="1" height="1" fill="#000000" />
+                  <rect x="3" y="8" width="1" height="1" fill="#000000" />
+                  <rect x="5" y="8" width="1" height="1" fill="#000000" />
+                  {/* Inner details */}
+                  <rect x="4" y="4" width="1" height="1" fill="#ffffff" />
+                </svg>
+              </div>
+              <div>
+                <span className="font-pixel text-xs tracking-wider text-stone-700 block">Vault Savings Target:</span>
+                <span className="text-xs text-stone-500 font-sans-mc block">Keep saving to achieve your end-of-term goal!</span>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="font-pixel text-[11px] text-stone-600 block">TARGET GOAL:</span>
+              <span className="font-pixel text-base text-amber-700 font-bold">{currency}{academic.targetSavingsGoal}</span>
+            </div>
+          </div>
+
+          {/* Minecraft-style XP Bar */}
+          <div className="relative h-7 bg-[#2c2c2c] border-4 border-[#1e1917] p-0.5 w-full flex items-center overflow-hidden">
+            {/* Filled portion */}
+            <div 
+              className="h-full bg-gradient-to-r from-[#55ff55] to-[#3cbf3c] border-r-4 border-[#1a5f1a]"
+              style={{ width: `${Math.max(0, Math.min(100, (projectedTermSavings / academic.targetSavingsGoal) * 100))}%` }}
+            />
+            {/* Central level indicator text with pixel text shadow */}
+            <div className="absolute inset-0 flex items-center justify-center select-none pointer-events-none">
+              <span className="font-pixel text-[11px] text-[#ffff55] tracking-widest drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] font-bold">
+                LVL {Math.round(Math.max(0, Math.min(100, (projectedTermSavings / academic.targetSavingsGoal) * 100)))}% ({currency}{Math.round(projectedTermSavings)} / {currency}{academic.targetSavingsGoal})
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 4 Core Item Inventory Slots */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Metric 1: Monthly Income */}

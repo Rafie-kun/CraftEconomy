@@ -18,6 +18,7 @@ export interface AcademicConfig {
   termMonths: number; // e.g. 8 months for typical academic year, or 12
   currency: string;
   initialSavings: number;
+  targetSavingsGoal?: number;
 }
 
 export interface BudgetProfile {

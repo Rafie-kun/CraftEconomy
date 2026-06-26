@@ -17,6 +17,7 @@ const DEFAULT_PROFILE: BudgetProfile = {
     termMonths: 8,
     currency: "$",
     initialSavings: 1500,
+    targetSavingsGoal: 2000,
   },
   incomes: [
     { id: "inc-1", name: "Part-time Campus Job", amount: 190, frequency: "weekly", category: "job" },
@@ -51,9 +52,36 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "transactions" | "scenario" | "advisor" | "config">("dashboard");
 
+  const [toast, setToast] = useState<{ message: string; subMessage?: string; visible: boolean }>({
+    message: "",
+    subMessage: "",
+    visible: false,
+  });
+
+  const showToast = (message: string, subMessage?: string) => {
+    setToast({ message, subMessage, visible: true });
+  };
+
+  // Auto-dismiss toast
+  useEffect(() => {
+    if (toast.visible) {
+      const timer = setTimeout(() => {
+        setToast(prev => ({ ...prev, visible: false }));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast.visible]);
+
+  const isFirstMount = React.useRef(true);
+
   // Save profile state to localStorage automatically on edits
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
     localStorage.setItem("student_budget_profile", JSON.stringify(profile));
+    showToast("Advancement Made!", "Progress Saved to Local Storage");
   }, [profile]);
 
   // Income Input Fields
@@ -72,6 +100,7 @@ export default function App() {
   const [termMonths, setTermMonths] = useState(profile.academic.termMonths);
   const [currency, setCurrency] = useState(profile.academic.currency);
   const [initialSavings, setInitialSavings] = useState(profile.academic.initialSavings);
+  const [targetSavingsGoal, setTargetSavingsGoal] = useState(profile.academic.targetSavingsGoal || 2000);
 
   const handleAddIncome = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +160,125 @@ export default function App() {
     }));
   };
 
+  const CURRENCIES = [
+    { code: "USD", symbol: "$", name: "Emerald Dollar ($)" },
+    { code: "GBP", symbol: "£", name: "Pound Sterling (£)" },
+    { code: "EUR", symbol: "€", name: "Euro (€)" },
+    { code: "INR", symbol: "₨", name: "Indian Rupee (₨)" },
+    { code: "BDT", symbol: "৳", name: "Bangladeshi Taka (৳)" },
+    { code: "JPY", symbol: "¥", name: "Japanese Yen (¥)" },
+    { code: "CAD", symbol: "C$", name: "Canadian Dollar (C$)" },
+  ];
+
+  // Currency Calculator States
+  const [calcAmount, setCalcAmount] = useState<number | "">(100);
+  const [calcFrom, setCalcFrom] = useState("USD");
+  const [calcTo, setCalcTo] = useState("BDT");
+
+  // Rates relative to USD (1 USD = X other currency)
+  const EXCHANGE_RATES: { [key: string]: number } = {
+    USD: 1.0,
+    GBP: 0.79,
+    EUR: 0.92,
+    INR: 83.5,
+    BDT: 117.5,
+    JPY: 157.8,
+    CAD: 1.37,
+  };
+
+  const getCalculatedValue = () => {
+    if (calcAmount === "" || calcAmount <= 0) return 0;
+    const fromRate = EXCHANGE_RATES[calcFrom] || 1;
+    const toRate = EXCHANGE_RATES[calcTo] || 1;
+    // convert fromCalc to USD, then USD to toCalc
+    const amountInUSD = calcAmount / fromRate;
+    const result = amountInUSD * toRate;
+    return Number(result.toFixed(2));
+  };
+
+  const handleQuickAddExpense = (name: string, amount: number, category: any, frequency: any) => {
+    const newItem: ExpenseItem = {
+      id: `exp-${Date.now()}`,
+      name,
+      amount,
+      frequency,
+      category,
+    };
+    setProfile(prev => ({
+      ...prev,
+      expenses: [...prev.expenses, newItem],
+    }));
+    showToast("Item Acquired!", `Added ${name} directly to ledger`);
+  };
+
+  const handleExportSummary = (format: "text" | "json") => {
+    const monthlyIncome = profile.incomes.reduce((sum, item) => {
+      let multiplier = 0;
+      if (item.frequency === 'monthly') multiplier = 1;
+      else if (item.frequency === 'weekly') multiplier = 4.33;
+      return sum + item.amount * multiplier;
+    }, 0);
+
+    const monthlyExpense = profile.expenses
+      .filter((e) => e.frequency !== 'one-time')
+      .reduce((sum, item) => {
+        let multiplier = 0;
+        if (item.frequency === 'monthly') multiplier = 1;
+        else if (item.frequency === 'weekly') multiplier = 4.33;
+        else if (item.frequency === 'daily') multiplier = 30;
+        return sum + item.amount * multiplier;
+      }, 0);
+
+    const oneTimeExpSum = profile.expenses
+      .filter((e) => e.frequency === 'one-time')
+      .reduce((sum, item) => sum + item.amount, 0);
+
+    const oneTimeIncSum = profile.incomes
+      .filter((i) => i.frequency === 'one-time')
+      .reduce((sum, item) => sum + item.amount, 0);
+
+    const monthlyNet = monthlyIncome - monthlyExpense;
+    const projectedTermSavings = profile.academic.initialSavings + (monthlyNet * profile.academic.termMonths) - oneTimeExpSum + oneTimeIncSum;
+
+    let output = "";
+    if (format === "json") {
+      output = JSON.stringify({
+        termMonths: profile.academic.termMonths,
+        currency: profile.academic.currency,
+        initialSavings: profile.academic.initialSavings,
+        targetSavingsGoal: profile.academic.targetSavingsGoal,
+        estimatedMonthlyIncome: Math.round(monthlyIncome),
+        estimatedMonthlyExpense: Math.round(monthlyExpense),
+        projectedTermSavings: Math.round(projectedTermSavings),
+        incomes: profile.incomes,
+        expenses: profile.expenses
+      }, null, 2);
+    } else {
+      output = `=========================================
+ ⛏️ CRAFTECONOMY STUDENT VAULT REPORT ⛏️
+=========================================
+Academic Term: ${profile.academic.termMonths} Months
+Currency: ${profile.academic.currency}
+Initial Savings Balance: ${profile.academic.currency}${profile.academic.initialSavings}
+Target Savings Goal: ${profile.academic.currency}${profile.academic.targetSavingsGoal || "Not Set"}
+-----------------------------------------
+💰 EST. MONTHLY INFLOW:  ${profile.academic.currency}${Math.round(monthlyIncome)}
+🔴 EST. MONTHLY OUTFLOW: ${profile.academic.currency}${Math.round(monthlyExpense)}
+⚖️ NET MONTHLY SURPLUS:  ${profile.academic.currency}${Math.round(monthlyNet)}
+-----------------------------------------
+📦 PROJECTED SAVINGS:    ${profile.academic.currency}${Math.round(projectedTermSavings)}
+=========================================
+Active Incomes:
+${profile.incomes.map(i => `- ${i.name}: ${profile.academic.currency}${i.amount} (${i.frequency})`).join("\n") || "No entries"}
+
+Active Expenses:
+${profile.expenses.map(e => `- ${e.name}: ${profile.academic.currency}${e.amount} (${e.frequency})`).join("\n") || "No entries"}`;
+    }
+
+    navigator.clipboard.writeText(output);
+    showToast("Clipboard Synced!", `${format.toUpperCase()} summary copied successfully`);
+  };
+
   const handleSaveConfig = (e: React.FormEvent) => {
     e.preventDefault();
     setProfile(prev => ({
@@ -139,6 +287,7 @@ export default function App() {
         termMonths,
         currency,
         initialSavings,
+        targetSavingsGoal,
       },
     }));
     setActiveTab("dashboard");
@@ -150,6 +299,7 @@ export default function App() {
       setTermMonths(DEFAULT_PROFILE.academic.termMonths);
       setCurrency(DEFAULT_PROFILE.academic.currency);
       setInitialSavings(DEFAULT_PROFILE.academic.initialSavings);
+      setTargetSavingsGoal(DEFAULT_PROFILE.academic.targetSavingsGoal || 2000);
     }
   };
 
@@ -254,6 +404,31 @@ export default function App() {
         <div className="flex-1">
           {activeTab === "dashboard" && (
             <div className="space-y-8 animate-fade-in">
+              {/* Export Vault Report Actions */}
+              <div className="mc-gui p-4 flex flex-col sm:flex-row justify-between items-center gap-4 bg-stone-200/50">
+                <div className="font-sans-mc">
+                  <h4 className="font-pixel text-xs text-stone-800 uppercase tracking-wider flex items-center gap-2">
+                    <span>📦 Vault Ledger Export</span>
+                    <span className="animate-pulse w-2 h-2 bg-green-500 shrink-0" />
+                  </h4>
+                  <p className="text-xs text-stone-600 mt-1">Export your academic budget report to your clipboard for external record keeping.</p>
+                </div>
+                <div className="flex gap-3 w-full sm:w-auto">
+                  <button
+                    onClick={() => handleExportSummary("text")}
+                    className="flex-1 sm:flex-none mc-btn text-xs py-2 px-4 whitespace-nowrap cursor-pointer"
+                  >
+                    COPY AS TEXT
+                  </button>
+                  <button
+                    onClick={() => handleExportSummary("json")}
+                    className="flex-1 sm:flex-none mc-btn text-xs py-2 px-4 bg-stone-600 border-stone-800 text-stone-200 whitespace-nowrap cursor-pointer"
+                  >
+                    COPY AS JSON
+                  </button>
+                </div>
+              </div>
+
               <BudgetSummary profile={profile} />
               <VisualCharts profile={profile} />
             </div>
@@ -384,6 +559,48 @@ export default function App() {
                   <h3 className="font-pixel text-xs text-stone-800 uppercase tracking-wider border-b border-stone-300 pb-2">
                     🔴 Add Expense Outlay
                   </h3>
+
+                  {/* Quick Add Hotbar Slots */}
+                  <div className="flex flex-col gap-2 bg-stone-200/50 p-3 border-4 border-stone-300 font-sans-mc">
+                    <span className="font-pixel text-[10px] text-stone-600 block uppercase">⚡ Quick Add Item Slots (Instantly Logs to Vault):</span>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAddExpense("Coffee Outing", 5, "food", "daily")}
+                        className="mc-btn text-[11px] py-1 px-2.5 flex items-center gap-1.5"
+                      >
+                        ☕ Coffee ({profile.academic.currency}5/Daily)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAddExpense("Campus Lunch", 12, "food", "daily")}
+                        className="mc-btn text-[11px] py-1 px-2.5 flex items-center gap-1.5"
+                      >
+                        🍔 Lunch ({profile.academic.currency}12/Daily)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAddExpense("Course Reference book", 65, "books", "one-time")}
+                        className="mc-btn text-[11px] py-1 px-2.5 flex items-center gap-1.5"
+                      >
+                        📚 Book ({profile.academic.currency}65)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAddExpense("Weekend Social hang", 25, "social", "weekly")}
+                        className="mc-btn text-[11px] py-1 px-2.5 flex items-center gap-1.5"
+                      >
+                        🍿 Hangout ({profile.academic.currency}25/Wk)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAddExpense("Transit Bus Ticket", 10, "transport", "weekly")}
+                        className="mc-btn text-[11px] py-1 px-2.5 flex items-center gap-1.5"
+                      >
+                        🚇 Transit ({profile.academic.currency}10/Wk)
+                      </button>
+                    </div>
+                  </div>
 
                   <form onSubmit={handleAddExpense} className="flex flex-col gap-4 font-sans-mc">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -519,71 +736,160 @@ export default function App() {
           )}
 
           {activeTab === "config" && (
-            <div className="max-w-xl mx-auto mc-gui flex flex-col gap-5 animate-fade-in">
-              <h3 className="font-pixel text-xs text-stone-800 uppercase tracking-wider border-b border-stone-300 pb-2">
-                ⚙️ Vault Config Settings
-              </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-fade-in">
+              {/* Settings Form (Left Col) */}
+              <div className="lg:col-span-6 mc-gui flex flex-col gap-5">
+                <h3 className="font-pixel text-xs text-stone-800 uppercase tracking-wider border-b border-stone-300 pb-2">
+                  ⚙️ Vault Config Settings
+                </h3>
 
-              <form onSubmit={handleSaveConfig} className="flex flex-col gap-5 font-sans-mc">
-                <div>
-                  <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Preferred Currency Symbol</label>
-                  <select
-                    value={currency}
-                    onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full text-base bg-stone-100 border-4 border-stone-500 font-bold p-2.5 text-stone-800 outline-hidden"
-                  >
-                    <option value="$">Emerald Dollar ($)</option>
-                    <option value="£">Pound (£)</option>
-                    <option value="€">Euro (€)</option>
-                    <option value="¥">Yen / Yuan (¥)</option>
-                    <option value="₱">Peso (₱)</option>
-                    <option value="₨">Rupee (₨)</option>
-                  </select>
-                </div>
+                <form onSubmit={handleSaveConfig} className="flex flex-col gap-5 font-sans-mc">
+                  <div>
+                    <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Preferred Currency Symbol</label>
+                    <select
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value)}
+                      className="w-full text-base bg-stone-100 border-4 border-stone-500 font-bold p-2.5 text-stone-800 outline-hidden"
+                    >
+                      {CURRENCIES.map(curr => (
+                        <option key={curr.code} value={curr.symbol}>
+                          {curr.name} ({curr.symbol})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Academic Session Length (Months)</label>
-                  <input
-                    type="number"
-                    value={termMonths}
-                    onChange={(e) => setTermMonths(Math.max(1, Number(e.target.value)))}
-                    className="w-full mc-input"
-                    min="1"
-                    max="24"
-                    required
-                  />
-                  <span className="text-xs text-stone-600 mt-1 block">Usually 8 months representing standard university terms.</span>
-                </div>
+                  <div>
+                    <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Academic Session Length (Months)</label>
+                    <input
+                      type="number"
+                      value={termMonths}
+                      onChange={(e) => setTermMonths(Math.max(1, Number(e.target.value)))}
+                      className="w-full mc-input"
+                      min="1"
+                      max="24"
+                      required
+                    />
+                    <span className="text-xs text-stone-600 mt-1 block">Usually 8 months representing standard university terms.</span>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Starting Savings ({currency})</label>
-                  <input
-                    type="number"
-                    value={initialSavings}
-                    onChange={(e) => setInitialSavings(Math.max(0, Number(e.target.value)))}
-                    className="w-full mc-input"
-                    min="0"
-                    required
-                  />
-                  <span className="text-xs text-stone-600 mt-1 block">Starting treasury reserves inside the academic bank vault.</span>
-                </div>
+                  <div>
+                    <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Starting Savings ({currency})</label>
+                    <input
+                      type="number"
+                      value={initialSavings}
+                      onChange={(e) => setInitialSavings(Math.max(0, Number(e.target.value)))}
+                      className="w-full mc-input"
+                      min="0"
+                      required
+                    />
+                    <span className="text-xs text-stone-600 mt-1 block">Starting treasury reserves inside the academic bank vault.</span>
+                  </div>
 
-                <div className="border-t border-stone-300 pt-4 flex gap-4">
-                  <button
-                    type="submit"
-                    className="flex-1 mc-btn"
-                  >
-                    SAVE CHANGES
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab("dashboard")}
-                    className="mc-btn flex-1 bg-stone-600 border-stone-800 text-stone-300"
-                  >
-                    CANCEL
-                  </button>
+                  <div>
+                    <label className="block text-sm font-bold text-stone-700 uppercase mb-1">Target Savings Goal ({currency})</label>
+                    <input
+                      type="number"
+                      value={targetSavingsGoal}
+                      onChange={(e) => setTargetSavingsGoal(Math.max(0, Number(e.target.value)))}
+                      className="w-full mc-input"
+                      min="0"
+                      required
+                    />
+                    <span className="text-xs text-stone-600 mt-1 block">Your milestone target of savings for the semester.</span>
+                  </div>
+
+                  <div className="border-t border-stone-300 pt-4 flex gap-4">
+                    <button
+                      type="submit"
+                      className="flex-1 mc-btn"
+                    >
+                      SAVE CHANGES
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("dashboard")}
+                      className="mc-btn flex-1 bg-stone-600 border-stone-800 text-stone-300"
+                    >
+                      CANCEL
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Currency Calculator (Right Col) */}
+              <div className="lg:col-span-6 mc-gui flex flex-col gap-5">
+                <h3 className="font-pixel text-xs text-stone-800 uppercase tracking-wider border-b border-stone-300 pb-2">
+                  🪙 Currency Exchange Table & Converter
+                </h3>
+
+                <div className="flex flex-col gap-4 font-sans-mc">
+                  {/* Calculator Inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="sm:col-span-1">
+                      <label className="block text-xs font-bold text-stone-700 uppercase mb-1">Value</label>
+                      <input
+                        type="number"
+                        value={calcAmount}
+                        onChange={(e) => setCalcAmount(e.target.value === "" ? "" : Number(e.target.value))}
+                        className="w-full mc-input py-1.5 px-2"
+                        min="1"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 uppercase mb-1">From</label>
+                      <select
+                        value={calcFrom}
+                        onChange={(e) => setCalcFrom(e.target.value)}
+                        className="w-full text-sm bg-stone-100 border-4 border-stone-500 font-bold p-1 text-stone-800 outline-hidden"
+                      >
+                        {CURRENCIES.map(curr => (
+                          <option key={`from-${curr.code}`} value={curr.code}>{curr.code}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 uppercase mb-1">To</label>
+                      <select
+                        value={calcTo}
+                        onChange={(e) => setCalcTo(e.target.value)}
+                        className="w-full text-sm bg-stone-100 border-4 border-stone-500 font-bold p-1 text-stone-800 outline-hidden"
+                      >
+                        {CURRENCIES.map(curr => (
+                          <option key={`to-${curr.code}`} value={curr.code}>{curr.code}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Large Result box */}
+                  <div className="mc-dark-inset p-4 text-center rounded-none border-4 border-stone-700">
+                    <span className="font-pixel text-[10px] text-stone-400 block uppercase tracking-wider">Redeemed Exchange Value</span>
+                    <span className="font-pixel text-2xl text-[#fdf55f] block mt-1">
+                      {CURRENCIES.find(c => c.code === calcTo)?.symbol}{getCalculatedValue()}
+                    </span>
+                    <span className="text-[10px] text-stone-400 block mt-1.5 font-mono">
+                      Based on current server index rates
+                    </span>
+                  </div>
+
+                  {/* Index rates table */}
+                  <div className="space-y-2 mt-2">
+                    <span className="font-pixel text-[10px] text-stone-600 block uppercase">📈 Active Exchange Index (1 USD):</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      {CURRENCIES.filter(c => c.code !== "USD").map(curr => {
+                        const rate = EXCHANGE_RATES[curr.code] || 1;
+                        return (
+                          <div key={`rate-${curr.code}`} className="mc-inset p-2 flex justify-between items-center text-xs text-stone-200">
+                            <span className="font-bold">{curr.code}</span>
+                            <span className="font-pixel text-[10px] text-[#55ff55]">{curr.symbol}{rate.toFixed(2)}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </form>
+              </div>
             </div>
           )}
         </div>
@@ -603,6 +909,36 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Minecraft Achievement/Advancement Toast Notification */}
+      {toast.visible && (
+        <div className="fixed top-5 right-5 z-50 animate-bounce duration-500 max-w-sm pointer-events-none">
+          <div className="bg-[#2c2c2c] border-4 border-[#1e1917] p-4 flex items-center gap-3 shadow-2xl">
+            {/* Emerald Icon representing advancement */}
+            <div className="mc-hotbar-slot w-12 h-12 shrink-0 bg-stone-700 flex items-center justify-center border-2 border-stone-500">
+              <svg width="24" height="24" viewBox="0 0 9 9" fill="none" style={{ imageRendering: "pixelated" }}>
+                <rect x="3" y="1" width="3" height="7" fill="#55ff55" />
+                <rect x="2" y="2" width="5" height="5" fill="#55ff55" />
+                <rect x="4" y="0" width="1" height="9" fill="#55ff55" />
+                <rect x="1" y="4" width="7" height="1" fill="#55ff55" />
+                <rect x="2" y="1" width="1" height="1" fill="#00aa00" />
+                <rect x="6" y="1" width="1" height="1" fill="#00aa00" />
+                <rect x="1" y="2" width="1" height="2" fill="#00aa00" />
+                <rect x="7" y="2" width="1" height="2" fill="#00aa00" />
+                <rect x="2" y="7" width="1" height="1" fill="#00aa00" />
+                <rect x="6" y="7" width="1" height="1" fill="#00aa00" />
+                <rect x="1" y="5" width="1" height="2" fill="#00aa00" />
+                <rect x="7" y="5" width="1" height="2" fill="#00aa00" />
+                <rect x="4" y="2" width="1" height="1" fill="#ffffff" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-pixel text-[11px] text-[#ffff55] tracking-wider uppercase">{toast.message}</p>
+              <p className="text-stone-300 text-xs font-sans-mc font-semibold mt-0.5">{toast.subMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
