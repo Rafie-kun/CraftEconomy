@@ -1,8 +1,36 @@
-node_modules/
-build/
-dist/
-coverage/
+# Build outputs
+plugin/target/
+dashboard/dist/
+dashboard/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
 *.log
-.env*
-!.env.example
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Java
+*.class
+*.jar
+*.war

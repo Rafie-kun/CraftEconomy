@@ -1,0 +1,90 @@
+# CraftEconomy Configuration
+# https://github.com/Rafie-kun/CraftEconomy
+
+# General Settings
+general:
+  # Primary currency name
+  currency-name: "Emerald"
+  currency-name-plural: "Emeralds"
+  currency-symbol: "E"
+  # Starting balance for new players
+  starting-balance: 100.0
+  # Maximum balance any account can hold
+  max-balance: 1000000000.0
+  # Enable/disable economy for the server
+  enabled: true
+
+# Storage Settings
+storage:
+  # Type: sqlite or mysql
+  type: sqlite
+  mysql:
+    host: localhost
+    port: 3306
+    database: crafteco
+    username: root
+    password: ""
+    max-connections: 10
+    # Table prefix (useful for multiple plugins)
+    table-prefix: "ce_"
+
+# Bank Settings
+bank:
+  enabled: true
+  # Savings account interest rate (per hour)
+  savings-interest-rate: 0.001
+  # Fixed deposit rates (term in hours, rate per hour)
+  fixed-deposits:
+    24: 0.002
+    168: 0.005
+    720: 0.01
+  # Loan settings
+  loan:
+    enabled: true
+    max-loan-amount: 50000.0
+    interest-rate: 0.005
+    # Maximum loan duration in hours
+    max-duration: 720
+    # Require collateral (percentage of loan amount)
+    collateral-required: false
+    collateral-percentage: 50.0
+
+# Shop Settings
+shop:
+  enabled: true
+  # Maximum shops per player (0 = unlimited)
+  max-shops-per-player: 5
+  # Tax rate on player shop transactions (0.0 = no tax)
+  tax-rate: 0.05
+  # Enable server shops
+  server-shops-enabled: true
+
+# Transaction Settings
+transactions:
+  # Log all transactions
+  enabled: true
+  # Maximum transaction history per player
+  max-history: 100
+  # Log to file as well
+  log-to-file: false
+  log-file: "plugins/CraftEconomy/transactions.log"
+
+# Cooldowns (in seconds)
+cooldowns:
+  pay: 0
+  bank-deposit: 0
+  bank-withdraw: 0
+
+# Messages (see messages.yml for all messages)
+messages-file: "messages.yml"
+
+# PlaceholderAPI Integration
+placeholderapi:
+  enabled: true
+
+# Web Dashboard
+dashboard:
+  enabled: false
+  port: 8080
+  # API key for dashboard authentication
+  api-key: ""

@@ -1,0 +1,84 @@
+name: CraftEconomy
+version: ${project.version}
+main: com.rafiekun.crafteco.CraftEconomy
+api-version: '1.20'
+description: A full-featured Minecraft server economy plugin
+author: Rafie-kun
+softdepend: [PlaceholderAPI, Vault]
+libraries:
+  - com.google.code.gson:gson:2.10.1
+  - com.zaxxer:HikariCP:5.1.0
+
+commands:
+  balance:
+    description: Check your balance
+    usage: /balance [player]
+    aliases: [bal, money]
+  pay:
+    description: Send money to a player
+    usage: /pay <player> <amount>
+    aliases: [transfer, send]
+  eco:
+    description: Economy admin commands
+    usage: /eco <give|take|set|reset> <player> [amount]
+    permission: crafteco.admin.eco
+  bank:
+    description: Banking operations
+    usage: /bank <deposit|withdraw|accounts|loan|transfer>
+    aliases: [b]
+  shop:
+    description: Shop management
+    usage: /shop <create|remove|list|info>
+    aliases: [s]
+  transactions:
+    description: View transaction history
+    usage: /transactions [player]
+    aliases: [tx, history]
+  crafteco:
+    description: CraftEconomy main command
+    usage: /crafteco <reload|version|help>
+    aliases: [ce, econ]
+
+permissions:
+  crafteco.balance:
+    description: Check your own balance
+    default: true
+  crafteco.balance.others:
+    description: Check other players' balances
+    default: op
+  crafteco.pay:
+    description: Send money to other players
+    default: true
+  crafteco.bank:
+    description: Access banking features
+    default: true
+  crafteco.bank.loan:
+    description: Take out loans
+    default: true
+  crafteco.shop:
+    description: Access shop features
+    default: true
+  crafteco.shop.create:
+    description: Create player shops
+    default: true
+  crafteco.history:
+    description: View transaction history
+    default: true
+  crafteco.history.others:
+    description: View other players' history
+    default: op
+  crafteco.admin.eco:
+    description: Manage player balances
+    default: op
+  crafteco.admin.reload:
+    description: Reload plugin configuration
+    default: op
+  crafteco.admin.shop:
+    description: Manage server shops
+    default: op
+  crafteco.admin.bank:
+    description: Manage bank settings
+    default: op
+  crafteco.dashboard:
+    description: Access web dashboard API
+    default: op

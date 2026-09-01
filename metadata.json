@@ -1,6 +1,0 @@
-{
-  "name": "CraftEconomy Student Budget Planner",
-  "description": "An interactive student budget calculator with tuition planners, gear/laptop budgets, real-time lifestyle sandboxes, and server-side Gemini AI optimization tips.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

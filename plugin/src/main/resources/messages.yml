@@ -1,0 +1,82 @@
+# CraftEconomy Messages
+# Supports &-codes: &0-&f, &k, &l, &m, &n, &o, &r
+# Placeholders: {player}, {amount}, {balance}, {currency}, {target}, {account}, {interest}
+
+prefix: "&6[&2CraftEconomy&6] &r"
+
+# General
+no-permission: "&cYou don't have permission to do that."
+player-not-found: "&cPlayer '{player}' not found."
+invalid-amount: "&cInvalid amount. Must be a positive number."
+insufficient-funds: "&cYou don't have enough {currency}. You have &e{balance} &c{currency}."
+max-balance-reached: "&cYou've reached the maximum balance of &e{amount} {currency}&c."
+same-player: "&cYou can't send {currency} to yourself."
+on-cooldown: "&cPlease wait {time} seconds before doing that again."
+
+# Balance
+balance-self: "&aYour balance: &e{amount} {currency}"
+balance-other: "&a{player}'s balance: &e{amount} {currency}"
+
+# Pay
+pay-sent: "&aYou sent &e{amount} {currency} &ato &6{target}&a."
+pay-received: "&6{player} &asent you &e{amount} {currency}&a."
+pay-failed: "&cFailed to send {currency} to {target}."
+
+# Eco Admin
+eco-gave: "&aYou gave &e{amount} {currency} &ato &6{player}&a."
+eco-took: "&aYou took &e{amount} {currency} &afrom &6{player}&a."
+eco-set: "&aYou set &6{player}'s &abalance to &e{amount} {currency}&a."
+eco-reset: "&aYou reset &6{player}'s &abalanc to &e{amount} {currency}&a."
+
+# Bank
+bank-deposit: "&aYou deposited &e{amount} {currency} &ainto your {account}."
+bank-withdraw: "&aYou withdrew &e{amount} {currency} &afrom your {account}."
+bank-balance: "&a{account} balance: &e{amount} {currency}"
+bank-total: "&6Total across all accounts: &e{amount} {currency}"
+bank-no-account: "&cYou don't have a {account} account."
+bank-created: "&aYou created a {account} account."
+bank-interest: "&aYou earned &e{amount} {currency} &ain interest on your {account}."
+
+# Loans
+loan-taken: "&aYou took a loan of &e{amount} {currency} &awith &e{interest}% &ainterest."
+loan-repaid: "&aYou repaid &e{amount} {currency} &aof your loan."
+loan-balance: "&6Loan balance: &e{amount} {currency} &7(+{interest}% interest)"
+loan-overdue: "&cYour loan of &e{amount} {currency} &cis overdue! Please repay ASAP."
+loan-max-reached: "&cYou've reached the maximum loan amount."
+loan-collateral-required: "&cYou need &e{amount} {currency} &cas collateral to take this loan."
+
+# Shop
+shop-created: "&aYou created a shop selling &e{item} &afor &e{price} {currency}&a."
+shop-removed: "&aYou removed the shop."
+shop-bought: "&aYou bought &e{item} &afor &e{price} {currency}&a."
+shop-sold: "&aYou sold &e{item} &afor &e{price} {currency}&a."
+shop-no-stock: "&cThis shop is out of stock."
+shop-no-money: "&cYou can't afford this."
+shop-invalid-sign: "&cInvalid shop sign. Please place a valid shop sign."
+shop-list-header: "&6--- Your Shops ---"
+shop-list-entry: "&e#{id} &7- &f{item} x{amount} &7@ &e{price} {currency}"
+shop-list-empty: "&7You don't have any shops."
+
+# Transactions
+tx-header: "&6--- Recent Transactions ---"
+tx-entry: "&7[{date}] &f{type} &e{amount} {currency} &7{description}"
+tx-empty: "&7No recent transactions."
+tx-page: "&7Page {current}/{max}"
+
+# Plugin
+reload-success: "&aConfiguration reloaded successfully."
+version: "&6CraftEconomy v{version} &7by &fRafie-kun"
+help-header: "&6--- CraftEconomy Help ---"
+help-balance: "&e/balance [player] &7- Check balance"
+help-pay: "&e/pay <player> <amount> &7- Send money"
+help-bank: "&e/bank <deposit|withdraw|accounts> &7- Banking"
+help-shop: "&e/shop <create|remove|list> &7- Shops"
+help-transactions: "&e/transactions &7- View history"
+help-admin: "&e/eco <give|take|set> &7- Admin commands"
+
+# Advancements
+advancement-first-earnings: "&6✦ First Earnings &7- Earn your first {currency}!"
+advancement-wealthy: "&6✦ Wealthy &7- Reach 10,000 {currency}!"
+advancement-millionaire: "&6✦ Millionaire &7- Reach 1,000,000 {currency}!"
+advancement-bank-owner: "&6✦ Bank Owner &7- Open a savings account!"
+advancement-business-mogul: "&6✦ Business Mogul &7- Create 5 shops!"
